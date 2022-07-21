@@ -1,9 +1,91 @@
 {% extends 'home/base.html' %}
+{% load static %}
 
 {% block title %}
 Home
 {% endblock title %}
 
+{% block additional_scripts %}
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/geodata/data/countries2.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/geodata/india2020Low.js"></script>
+
+<script>
+    am5.ready(function() {
+        var continents = {
+        "AF": 0,
+        "AN": 1,
+        "AS": 2,
+        "EU": 3,
+        "NA": 4,
+        "OC": 5,
+        "SA": 6
+        }
+        var root = am5.Root.new("map");
+        var colors = am5.ColorSet.new(root, {});
+        root.setThemes([
+        am5themes_Animated.new(root)
+        ]);
+        var chart = root.container.children.push(am5map.MapChart.new(root, {
+        panX: "rotateX",
+        projection: am5map.geoMercator()
+        }));
+        
+        var worldSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+        geoJSON: am5geodata_india2020Low,
+        
+        }));
+
+        worldSeries.mapPolygons.template.setAll({
+        tooltipText: "{name}",
+        interactive: true,
+        fill: am5.color(0xaaaaaa),
+        templateField: "polygonSettings"
+        });
+
+        worldSeries.mapPolygons.template.states.create("hover", {
+        fill: colors.getIndex(1)
+        });
+
+        worldSeries.mapPolygons.template.events.on("click", (ev) => {
+        var dataItem = ev.target.dataItem;
+        var data = dataItem.dataContext;
+        console.log(data);
+        window.location = `/state/${data?.name.toLowerCase().split(' ').join('-')}`
+        });
+        var countrySeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+        visible: false
+        }));
+
+        countrySeries.mapPolygons.template.setAll({
+        tooltipText: "{name}",
+        interactive: true,
+        fill: am5.color(0xaaaaaa)
+        });
+
+        countrySeries.mapPolygons.template.states.create("hover", {
+        fill: colors.getIndex(1)
+        });
+    });
+</script>
+
+<style>
+    #map {
+      width: 100%;
+      height: 400px;
+    }
+</style>
+{% endblock additional_scripts %}
 {% block body %}
-<h1>Welcome!</h1>
+<div class="relative w-screen h-screen items-center justify-between">
+    {% include "nav/navbar.html" %}
+    <div class="flex flex-col items-center justify-center mt-4 space-y-10">
+        <h1 class="text-blue-500 text-3xl">Crime Hotspot Viewer</h1>
+        <!-- Map Here -->
+        <div id="map" ></div>
+        
+    </div>
+</div>
 {% endblock body %}

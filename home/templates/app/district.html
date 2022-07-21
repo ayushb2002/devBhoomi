@@ -1,0 +1,13 @@
+{% extends 'home/base.html' %}
+
+{% block title %}
+State - {{ state }}
+{% endblock %}
+
+{% block body %}
+{% include "nav/navbar.html" %}
+<div class="flex items-center justify-center mt-4">
+    <h1 class="text-3xl">Crime Hotspot Viewer for <span class="font-bold text-blue-500">{{district}}</span> District of <span class="font-bold text-green-500">{{state}}</span></h1>
+    <!-- Map Here -->
+</div>
+{% endblock %}
