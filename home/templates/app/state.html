@@ -58,8 +58,8 @@ State - {{ state }}
         position: relative;
         margin: 150px auto;
         border: 5px solid white;
-        height: 700px;
-        width: 900px;
+        height: 1000px;
+        width: 1000px;
         overflow: hidden;
         cursor: zoom-in;
     }
@@ -79,32 +79,34 @@ State - {{ state }}
 {% block body %}
 {% include "nav/navbar.html" %}
 <div class="flex flex-col items-center justify-center mt-4 space-y-4">
-    <h1 class="text-3xl">Crime Hotspot Viewer for state of <span class="font-bold text-green-500">{{state}}</span></h1>
+    <h1 class="text-3xl">Crime Hotspot Viewer for state of <span class="font-bold text-blue-500">{{state}}</span></h1>
     <!-- Map Here -->
     <!-- District List -->
     {% if act and crime %}
-    <h3 class="text-2xl text-green-500">Report of {{crime}} under {{act}} in {{state}}</h3>
+    <h3 class="text-2xl text-blue-500">Report of {{crime}} under {{act}} in {{state}}</h3>
     {% else %}
-    <h3 class="text-2xl text-green-500">Select Act and Crime to get Report</h3>
+    <h3 class="text-2xl text-blue-500">Select Act and Crime to get Report</h3>
     {% endif %}
     
     <form id="stateForm" method="post" class="flex flex-col gap-4 items-center justify-between">
         {% csrf_token %}
-        <select name="act" id="actSelect" class="select select-accent w-full max-w-lg">
+        <select name="act" id="actSelect" class="select select-info w-full max-w-lg">
             <option disabled selected>Select Act</option>
         </select>
-        <select name="crime" id="crimeSelect" class="select select-accent w-full max-w-lg">
+        <select name="crime" id="crimeSelect" class="select select-info w-full max-w-lg">
             <option disabled selected>Select Crime</option>
         </select>
-        <button type="submit" class="btn btn-accent w-full max-w-lg">
+        <button type="submit" class="btn dark:text-white btn-info w-full max-w-lg">
             Get Report
         </button>
     </form>
     {% if map %}
         <!-- <img src="data:image/png;base64, {{map|safe}}" style="object-fit: contain;" height="600px" width="600px" id="chart" alt="{{state}}" /> -->
+        <span class="text-warning text-center"><b>*</b>Hover to zoom</span>
         <figure class="zoom" onmousemove="zoom(event)" style="background-image: url('data:image/png;base64, {{map|safe}}')">
             <img src="data:image/png;base64, {{map|safe}}" id="chart" alt="{{state}}" />
         </figure>
     {% endif %}
+    <div class="h-4"></div>
 </div>
 {% endblock %}

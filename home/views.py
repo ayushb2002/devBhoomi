@@ -32,16 +32,15 @@ def getStateMap(request, state=''):
 def sendMap(request, state=''):
     if request.method == "POST":
         stateSend = ' '.join([i.capitalize() for i in state.split('-')]).strip()
-        print(stateSend)
         if stateSend not in states:
             return render(request, 'errors/404.html', {"error": "State not Found"}) 
         optDict = getSelectOpts()
         act = request.POST['act']
         if (act not in optDict.keys()):
-            return render(request, 'errors/404.html', {"error": "Act not Found"}) 
+            return render(request, 'errors/404.html', {"error": "Act not Found or Data of this act is not available for this state"}) 
         crime = request.POST['crime']
         if crime not in optDict[act]:
-            return render(request, 'errors/404.html', {"error": "Crime not Found"}) 
+            return render(request, 'errors/404.html', {"error": "Crime not Found or Data of this crime is not available for this state"}) 
         map_g = final(act, crime, stateSend)
         return render(request, 'app/state.html', {"state": stateSend, "crime": crime, "act": act, "map": map_g, "acts": list(optDict.keys()), "crimes": list(optDict.values())})
     else:

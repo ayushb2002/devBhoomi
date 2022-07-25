@@ -32,7 +32,7 @@ def generateHeatMap(india_map, df, state, crime):
     plt.switch_backend('AGG')
     state_map = india_map[india_map["statename"]==state]
     heat_map = state_map.merge(df, on=["distname", "statename"])
-    fig, ax = plt.subplots(1, figsize=(15, 15))
+    fig, ax = plt.subplots(1, figsize=(20,20))
     plt.xticks(rotation=90)
     plt.title(f'{crime} in {state}')
     ax = heat_map.plot(column=crime, cmap="Reds", linewidth=0.4, ax=ax, edgecolor="0.4")
